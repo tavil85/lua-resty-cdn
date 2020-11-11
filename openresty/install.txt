@@ -1,0 +1,17 @@
+# openresty installation on debian 10
+
+apt-get -y install --no-install-recommends wget gnupg ca-certificates
+wget -O - https://openresty.org/package/pubkey.gpg | apt-key add -
+apt-get -y install --no-install-recommends software-properties-common
+echo "deb http://openresty.org/package/debian $(lsb_release -sc) openresty" > /etc/apt/sources.list.d/openresty.list
+apt-get update
+apt-get -y install openresty
+
+# help
+openresty -h
+# configuration test
+openresty -t
+# status
+systemctl status openresty.service
+# restart
+systemctl restart openresty.service
