@@ -4,8 +4,9 @@ apt-get -y install --no-install-recommends wget gnupg ca-certificates
 wget -O - https://openresty.org/package/pubkey.gpg | apt-key add -
 apt-get -y install --no-install-recommends software-properties-common
 echo "deb http://openresty.org/package/debian $(lsb_release -sc) openresty" > /etc/apt/sources.list.d/openresty.list
+echo "deb http://deb.debian.org/debian buster-backports main" > /etc/apt/sources.list.d/backports.list
 apt-get update
-apt-get -y install openresty
+apt-get -y install openresty s3cmd
 
 # help
 openresty -h
