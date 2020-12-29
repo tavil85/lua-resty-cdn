@@ -1,4 +1,4 @@
-if ngx.status == 200 then
+if ngx.status == 200 and ngx.req.get_method() ~= "HEAD" and not ngx.ctx.sync_lock then
     if ngx.ctx.old_file == ngx.md5(ngx.ctx.temp_file) then -- check if the file changed
         ngx.shared.cdn_dict:expire(ngx.md5(ngx.var.uri),(ngx.var.cdn_valid_time+0))
     else
