@@ -8,7 +8,4 @@ if not ngx.is_subrequest and ngx.var.http_cdnmanage ~= "localcurl" and ngx.req.g
     if (ngx.ctx.content_length+0) > 1048576 then
         ngx.ctx.fileisbig = true
     end
-    if ngx.ctx.fileisbig then
-        local putrequest = ngx.location.capture(ngx.var.uri,{ method = ngx.HTTP_PUT })
-    end
 end
