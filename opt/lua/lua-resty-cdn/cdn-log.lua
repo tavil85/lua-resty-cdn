@@ -1,5 +1,5 @@
 -- small files
-if ngx.status == 200 and ngx.req.get_method() ~= "HEAD" and not ngx.ctx.fileisbig and not ngx.ctx.sync_lock then
+if ngx.status == 200 and ngx.req.get_method() ~= "HEAD" and not ngx.ctx.fileisbig and not ngx.ctx.sync_lock and not ngx.var.http_range then
     local file = io.open( ngx.ctx.filepath , "r")
     local size = file:seek("end")
     io.close(file)
@@ -13,7 +13,7 @@ if ngx.status == 200 and ngx.req.get_method() ~= "HEAD" and not ngx.ctx.fileisbi
     ngx.shared.cdn_temp:delete(ngx.md5(ngx.var.uri)) -- remove update lock
 end
 -- big files
-if ngx.status == 200 and ngx.req.get_method() ~= "HEAD" and ngx.ctx.fileisbig and not ngx.ctx.sync_lock then
+if ngx.status == 200 and ngx.req.get_method() ~= "HEAD" and ngx.ctx.fileisbig and not ngx.ctx.sync_lock and not ngx.var.http_range then
     ngx.shared.cdn_temp:set(ngx.md5(ngx.var.uri),ngx.req.start_time()) -- set update lock
     local filepath = "/var/cache/nginx/cdn_temp/0" .. ngx.md5(ngx.var.uri) -- added 0 to md5 to avoid curl temp file overlap
     local curl_command = "curl -ks --header cdnmanage:localcurl --resolve " .. ngx.var.host .. ":" .. ngx.var.server_port .. ":127.0.0.1 " .. ngx.var.scheme .. "://" .. ngx.var.host .. ":" .. ngx.var.server_port .. ngx.var.request_uri .. " --output " .. filepath
